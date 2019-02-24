@@ -11,7 +11,14 @@
 
 ### Authentication
 
-Set `USERNAME` and `PASSWORD` of a user that has at least `SELECT` permission to `ALL` databases.
+Set `USERNAME` and `PASSWORD` of a user that has the appropriate permissions to backup ALL databases. (*See mysql documentation for details*)
+
+If USERNAME is set to "debian" and PASSWORD is unset or "" obtain them from the file /etc/mysql/debian.cnf
+
+- First command line option "-c" for configfile
+- Interpretable Exit-States:
+    1. given configfile is not readable or does not exist
+    2. unknown option
 
 ### Target Server to Backup
 
@@ -111,7 +118,7 @@ Use `PREBACKUP` and `POSTBACKUP` to specify Per and Post backup commands or scri
 
 * **Daily** Backups are rotated weekly..
 * **Weekly** Backups are run by default on Saturday Morning when cron.daily scripts are run. Can be changed with `DOWEEKLY` setting. Weekly Backups are rotated on a 5 week cycle..
-* **Monthly** Backups are run on the 1st of the month. Monthly Backups are NOT rotated automatically...
+* **Monthly** Backups are run on the 1st of the month. Monthly Backups are rotated on a 5 month cycle.
 
 **Note:** It may be a good idea to copy Monthly backups offline or to another server..
 
