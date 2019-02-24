@@ -1,5 +1,8 @@
 # Change Log
 
+## 2.5 - (2006-01-15)
+- Added support for setting MAXIMUM_PACKET_SIZE and SOCKET parameters. (suggested by Yvo van Doorn)
+
 ## 2.4 - (2006-01-23)
 - Fixed bug where weekly backups were not being rotated. (fix by wolf02)
 - Added hour an min to backup filename for the case where backups are taken multiple times in a day. 

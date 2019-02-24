@@ -93,6 +93,16 @@ To set the day of the week that you would like the weekly backup to happen set t
 
 `LATEST` is to store an additional copy of the latest backup to a standard location so it can be downloaded by thrid party scripts.
 
+### Blob
+
+If the DB's being backed up make use of large `BLOB` fields then you may need to increase the `MAX_ALLOWED_PACKET` setting, for example 16MB.
+
+### Socket
+
+When connecting to localhost as the DB server (`DBHOST=localhost`) sometimes the system can have issues locating the socket file. This can now be set using the `SOCKET` parameter. An example may be 
+
+    SOCKET=/private/tmp/mysql.sock
+
 ### Pre-Backup and Post-Backup Scripts
 
 Use `PREBACKUP` and `POSTBACKUP` to specify Per and Post backup commands or scripts to perform tasks either before or after the backup process.
