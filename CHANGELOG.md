@@ -1,5 +1,13 @@
 # Change Log
 
+## 2.4 - (2006-01-23)
+- Fixed bug where weekly backups were not being rotated. (fix by wolf02)
+- Added hour an min to backup filename for the case where backups are taken multiple times in a day. 
+  NOTE This is not complete support for mutiple executions of the script in a single day.
+- Added MAILCONTENT="quiet" option, see docs for details. (requested by snowsam)
+- Updated path statment for compatibility with OSX.
+- Added "LATEST" to additionally store the last backup to a standard location. (request by Grant29)
+
 ## 2.3 - (2005-11-07)
 - Better error handling and notification of errors (a long time coming).
 - Compression on Backup server to MySQL server communications.

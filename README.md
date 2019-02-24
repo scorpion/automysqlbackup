@@ -41,7 +41,7 @@ You can change the backup storage location from `/backups` to anything you like 
 
 The `MAILCONTENT` and `MAILADDR` options and pretty self explanitory, use these to have the backup log mailed to you at any email address or multiple email addresses in a space seperated list.
 
-> **Note:** If you set mail content to "log" you will require access to the "mail" program on your server. If you set this to "files" you will have to have mutt installed on your server. If you set it sto stdout it will log to the screen if run from the console or to the cron job owner if run through cron.
+> **Note:** If you set mail content to "log" you will require access to the "mail" program on your server. If you set this to "files" you will have to have mutt installed on your server. If you set it to "stdout" it will log to the screen if run from the console or to the cron job owner if run through cron. If you set it to "quiet". logs will only be mailed if there are errors reported.
 
 ### Email Size
 
@@ -88,6 +88,10 @@ To set the day of the week that you would like the weekly backup to happen set t
 ### Remote Compression
 
 `COMMCOMP` is used to enable or diable mysql client to server compression, so it is useful to save bandwidth when backing up a remote MySQL server over the network.
+
+### Latest Backup
+
+`LATEST` is to store an additional copy of the latest backup to a standard location so it can be downloaded by thrid party scripts.
 
 ### Pre-Backup and Post-Backup Scripts
 
