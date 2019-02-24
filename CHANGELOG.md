@@ -1,0 +1,87 @@
+# Change Log
+
+## 2.3 - (2005-11-07)
+- Better error handling and notification of errors (a long time coming).
+- Compression on Backup server to MySQL server communications.
+
+## 2.2 - (2004-12-05)
+- Changed from using depricated "-N" to "--skip-column-names".
+- Added ability to have compressed backup's emailed out. (code from Thomas Heiserowski)
+- Added maximum attachment size setting.
+
+## 2.1 - (2004-11-04)
+- Fixed a bug in daily rotation when not using gzip compression. (fix by Rob Rosenfeld)
+
+## 2.0 - (2004-07-28)
+- Switched to using IO redirection instead of pipeing the output to the logfile.
+- Added choice of compression of backups being gzip of bzip2.
+- Switched to using functions to facilitate more functionality.
+- Added option of either gzip or bzip2 compression.
+
+## 1.10 - (2004-07-17)
+- Another fix for spaces in the paths. (fix by Thomas von Eyben)
+- Fixed bug when using PREBACKUP and POSTBACKUP commands containing many arguments.
+
+## 1.9 - (2004-05-25)
+- Mall bug fix to handle spaces in LOGFILE path which contains spaces. (reported by Thomas von Eyben)
+- Updated docs to mention that Log email can be sent to multiple email addresses.
+
+## 1.8 - (2004-05-01)
+- Added option to make backups restorable to alternate database names, meaning that a copy of the database can be created. (based on patch by Rene Hoffmann)
+- Seperated options into standard and advanced.
+- Removed " from single file dump DBMANES because it caused an error but this means that if DB's have spaces in the name they will not dump when SEPDIR=no.
+- Added -p option to mkdir commands to create multiple subdirs without error.
+- Added disk usage and location to the bottom of the backup report.
+
+## 1.7 - (2004-04-22)
+- Fixed an issue where weelky backups would only work correctly if server locale was set to English. (issue reported by Tom Ingberg)
+- Used "eval" for "rm" commands to try and resolve rotation issues.
+- Changed name of status log so multiple scripts can be run at the same time.
+
+## 1.6 - (2004-03-14)
+- Added PREBACKUP and POSTBACKUP command functions. (patch by markpustjens)
+- Added support for backing up DB's with Spaces in the name. (patch by markpustjens)
+
+## 1.5 - (2004-02-24)
+- Added the ability to exclude DB's when the "all" option is used. (Patch by kampftitan)
+
+## 1.4 - (2004-02-02)
+- Project moved to Sourceforge.net
+
+## 1.3 - (2003-09-25)
+- Added support for backing up "all" databases on the server without having to list each one seperately in the configuration.
+- Added DB restore instructions.
+
+## 1.2 - (2003-03-16)
+- Added server name to the backup log so logs from multiple servers can be easily identified.
+
+## 1.1 - (2003-03-13)
+- Small Bug fix in monthly report. (Thanks Stoyanski)
+- Added option to email log to any email address. (Inspired by Stoyanski)
+- Changed Standard file name to .sh extention.
+- Option are set using yes and no rather than 1 or 0.
+
+## 1.0 - (2003-01-30)
+- Added the ability to have all databases backup to a single dump file or seperate directory and file for each database.
+- Output is better for log keeping.
+
+## 0.6 - (2003-01-22)
+- Bug fix for daily directory (added in VER 0.5) rotation.
+
+## 0.5 - (2003-01-20)
+- Added "daily" directory for daily backups for neatness. (suggestion by Jason)
+- Added DBHOST option to allow backing up a remote server. (suggestion by Jason)
+- Added "--quote-names" option to mysqldump command.
+- Bug fix for handling the last and first of the year week rotation.
+
+## 0.4 - (2002-11-06)
+- Added the abaility for the script to create its own directory structure.
+
+## 0.3 - (2002-10-01)
+- Changed Naming of Weekly backups so they will show in order.
+
+## 0.2 - (2002-09-27)
+- Corrected weekly rotation logic to handle weeks 0 - 10.
+
+## 0.1 - (2002-09-21)
+- Initial Release
