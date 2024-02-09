@@ -11,14 +11,14 @@
 
 ### Authentication
 
-Set `USERNAME` and `PASSWORD` of a user that has the appropriate permissions to backup ALL databases. (*See mysql documentation for details*)
+Set `USERNAME` and `PASSWORD` of a user that has the appropriate permissions to backup ALL databases. (_See mysql documentation for details_)
 
 If USERNAME is set to "debian" and PASSWORD is unset or "" obtain them from the file /etc/mysql/debian.cnf
 
 - First command line option "-c" for configfile
 - Interpretable Exit-States:
-    1. given configfile is not readable or does not exist
-    2. unknown option
+  1. given configfile is not readable or does not exist
+  2. unknown option
 
 ### Target Server to Backup
 
@@ -82,7 +82,7 @@ Set `CREATE_DATABASE` to `"yes"` (the default) if you want your SQL-Dump to crea
 
 ### Backup Databases to One File
 
-The `SEPDIR` option allows you to choose to have all DBs backed up to a single file (*fast restore of entire server in case of crash*) or to seperate directories for each DB (*each DB can be restored seperately in case of single DB corruption or loss*).
+The `SEPDIR` option allows you to choose to have all DBs backed up to a single file (_fast restore of entire server in case of crash_) or to seperate directories for each DB (_each DB can be restored seperately in case of single DB corruption or loss_).
 
 ### Specify Day
 
@@ -106,7 +106,7 @@ If the DB's being backed up make use of large `BLOB` fields then you may need to
 
 ### Socket
 
-When connecting to localhost as the DB server (`DBHOST=localhost`) sometimes the system can have issues locating the socket file. This can now be set using the `SOCKET` parameter. An example may be 
+When connecting to localhost as the DB server (`DBHOST=localhost`) sometimes the system can have issues locating the socket file. This can now be set using the `SOCKET` parameter. An example may be
 
     SOCKET=/private/tmp/mysql.sock
 
@@ -116,17 +116,21 @@ Use `PREBACKUP` and `POSTBACKUP` to specify Per and Post backup commands or scri
 
 ## Backup Rotation
 
-* **Daily** Backups are rotated weekly..
-* **Weekly** Backups are run by default on Saturday Morning when cron.daily scripts are run. Can be changed with `DOWEEKLY` setting. Weekly Backups are rotated on a 5 week cycle..
-* **Monthly** Backups are run on the 1st of the month. Monthly Backups are rotated on a 5 month cycle.
+- **Daily** Backups are rotated weekly..
+- **Weekly** Backups are run by default on Saturday Morning when cron.daily scripts are run. Can be changed with `DOWEEKLY` setting. Weekly Backups are rotated on a 5 week cycle..
+- **Monthly** Backups are run on the 1st of the month. Monthly Backups are rotated on a 5 month cycle.
 
 **Note:** It may be a good idea to copy Monthly backups offline or to another server..
 
+## MyDumper
+
+Use [mydumper](https://github.com/mydumper/mydumper) istead of mysqldump. Used only when `SEPDIR=yes`
+
 ## Please Note
 
-*I take no resposibility for any data loss or corruption when using this script.*
+_I take no resposibility for any data loss or corruption when using this script._
 
-> **This script will not help in the event of a hard drive crash.** If a  copy of the backup has **not** be stored offline or on another PC..
+> **This script will not help in the event of a hard drive crash.** If a copy of the backup has **not** be stored offline or on another PC..
 
 You should copy your backups **offline regularly** for best protection.
 
