@@ -1,5 +1,18 @@
 # Change Log
 
+## 2.6.1
+
+- Backported fix AutoMySQLBackup bug #3074425. PATH variable moved on top.
+- Using hard link for latest backup instead of copying
+- ECHO output put into quotes
+- Backported AutoMySQLBackup bug #3292873. Changed SHEBANG to #!/usr/bin/env bash for portability reasons.
+- Backport bugfix 'Total disk space on symbolic links' (AutoMySQLBackup bug #3064547)
+- Fix bug passwords with spaces cause script to fail (AutoMySQLBackup bug #3031023)
+- Added rotation configuration. Daily 6 days, weekly 35 days, monthly 150 days saved by default
+- Use hard link for latest backup instead of copy (AutoMySQLBackup feature #3284779)
+- Backported feature request item #3053623 from AutoMySQLBackup 3.0_beta1
+- Change log moved to separate file
+
 ## 2.6.0
 
 - Add mydumper support

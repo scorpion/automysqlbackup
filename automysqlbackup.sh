@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 # MySQL MyDumper Backup Script
 # VER. 2.5.1 - http://sourceforge.net/projects/automysqlbackup/
@@ -109,6 +109,21 @@ else
 	MYDUMPER_NO_LOCKS='yes'
 
 	MYDUMPER_THREADS=4
+
+	# Set umask
+	# Uncomment to activate! This will give folders rwx------
+	# and files rw------- permissions.                       
+	SET_UMASK=0077                                              
+  	
+    # Set rotation of daily backups. VALUE*24hours
+    # If you want to keep only today's backups, you could choose 1, i.e. everything older than 24hours will be removed.
+    ROTATION_DAILY=6
+
+    # Set rotation for weekly backups. VALUE*24hours
+    ROTATION_WEEKLY=35
+
+    # Set rotation for monthly backups. VALUE*24hours
+    ROTATION_MONTHLY=150
 
 	# Command to run before backups (uncomment to use)
 	#PREBACKUP="/etc/mysql-backup-pre"
@@ -270,114 +285,6 @@ fi
 # Lets hope you never have to use this.. :)
 #
 #=====================================================================
-# Change Log
-#=====================================================================
-#
-# VER 2.6.0 (2013-09-16)
-#     - Add mydumper support
-# VER 2.5.1-01 - (2010-07-06)
-#     - Fixed pathname bug item #3025849 (by Johannes Kolter)
-# VER 2.5.1 - (2010-07-04)
-#     - Added support for default and optional config file (by Johannes Kolter)
-#     - Rotating after backup was successful whith find(1) (by Johannes Kolter)
-#     - Implementation of Variables containing full path to binaries to
-#       avoid possibly confusion with aliases or builtins. (by Johannes Kolter)
-#     - Fixed bug where weekly backups were not being rotated.
-#       Added rotation of 5 monthly backups
-#       Now all old backups are deleted, not only the most recent one
-#       (inspired by oleg@bintime.com)
-#     - Use Debian special-file to access database (by Johannes Kolter)
-#     - Fixed bug ID: 1438565
-#       Moved IO redirection to a place before decicions are made and actions are taken.
-#       (inspired by Derk Bernhardt)
-#     - Fixed bug ID: #3000316 (reported by Sascha Feldhorst)
-#     - Fixed bug ID: #1529458 (reported by Natalie ( njwood ))
-#     - Fixed bug ID: #1548919 (reported by Piotr Kuczynski)
-# VER 2.5 - (2006-01-15)
-#		Added support for setting MAXIMUM_PACKET_SIZE and SOCKET parameters (suggested by Yvo van Doorn)
-# VER 2.4 - (2006-01-23)
-#    Fixed bug where weekly backups were not being rotated. (Fix by wolf02)
-#    Added hour an min to backup filename for the case where backups are taken multiple
-#    times in a day. NOTE This is not complete support for mutiple executions of the script
-#    in a single day.
-#    Added MAILCONTENT="quiet" option, see docs for details. (requested by snowsam)
-#    Updated path statment for compatibility with OSX.
-#    Added "LATEST" to additionally store the last backup to a standard location. (request by Grant29)
-# VER 2.3 - (2005-11-07)
-#    Better error handling and notification of errors (a long time coming)
-#    Compression on Backup server to MySQL server communications. 
-# VER 2.2 - (2004-12-05)
-#    Changed from using depricated "-N" to "--skip-column-names".
-#    Added ability to have compressed backup's emailed out. (code from Thomas Heiserowski)
-#    Added maximum attachment size setting.
-# VER 2.1 - (2004-11-04)
-#    Fixed a bug in daily rotation when not using gzip compression. (Fix by Rob Rosenfeld)
-# VER 2.0 - (2004-07-28)
-#    Switched to using IO redirection instead of pipeing the output to the logfile.
-#    Added choice of compression of backups being gzip of bzip2.
-#    Switched to using functions to facilitate more functionality.
-#    Added option of either gzip or bzip2 compression. 
-# VER 1.10 - (2004-07-17)
-#    Another fix for spaces in the paths (fix by Thomas von Eyben)
-#    Fixed bug when using PREBACKUP and POSTBACKUP commands containing many arguments.
-# VER 1.9 - (2004-05-25)
-#    Small bug fix to handle spaces in LOGFILE path which contains spaces (reported by Thomas von Eyben)
-#    Updated docs to mention that Log email can be sent to multiple email addresses.
-# VER 1.8 - (2004-05-01)
-#    Added option to make backups restorable to alternate database names
-#    meaning that a copy of the database can be created (Based on patch by Rene Hoffmann)
-#    Seperated options into standard and advanced.
-#    Removed " from single file dump DBMANES because it caused an error but
-#    this means that if DB's have spaces in the name they will not dump when SEPDIR=no.
-#    Added -p option to mkdir commands to create multiple subdirs without error.
-#    Added disk usage and location to the bottom of the backup report.
-# VER 1.7 - (2004-04-22)
-#    Fixed an issue where weelky backups would only work correctly if server
-#    locale was set to English (issue reported by Tom Ingberg)
-#    used "eval" for "rm" commands to try and resolve rotation issues.
-#    Changed name of status log so multiple scripts can be run at the same time.
-# VER 1.6 - (2004-03-14)
-#   Added PREBACKUP and POSTBACKUP command functions. (patch by markpustjens)
-#   Added support for backing up DB's with Spaces in the name.
-#   (patch by markpustjens)
-# VER 1.5 - (2004-02-24)
-#   Added the ability to exclude DB's when the "all" option is used.
-#   (Patch by kampftitan)
-# VER 1.4 - (2004-02-02)
-#   Project moved to Sourceforge.net
-# VER 1.3 - (2003-09-25)
-#   Added support for backing up "all" databases on the server without
-#    having to list each one seperately in the configuration.
-#   Added DB restore instructions.
-# VER 1.2 - (2003-03-16)
-#   Added server name to the backup log so logs from multiple servers
-#   can be easily identified.
-# VER 1.1 - (2003-03-13)
-#   Small Bug fix in monthly report. (Thanks Stoyanski)
-#   Added option to email log to any email address. (Inspired by Stoyanski)
-#   Changed Standard file name to .sh extention.
-#   Option are set using yes and no rather than 1 or 0.
-# VER 1.0 - (2003-01-30)
-#   Added the ability to have all databases backup to a single dump
-#   file or seperate directory and file for each database.
-#   Output is better for log keeping.
-# VER 0.6 - (2003-01-22)
-#   Bug fix for daily directory (Added in VER 0.5) rotation.
-# VER 0.5 - (2003-01-20)
-#   Added "daily" directory for daily backups for neatness (suggestion by Jason)
-#   Added DBHOST option to allow backing up a remote server (Suggestion by Jason)
-#   Added "--quote-names" option to mysqldump command.
-#   Bug fix for handling the last and first of the year week rotation.
-# VER 0.4 - (2002-11-06)
-#   Added the abaility for the script to create its own directory structure.
-# VER 0.3 - (2002-10-01)
-#   Changed Naming of Weekly backups so they will show in order.
-# VER 0.2 - (2002-09-27)
-#   Corrected weekly rotation logic to handle weeks 0 - 10 
-# VER 0.1 - (2002-09-21)
-#   Initial Release
-#
-#=====================================================================
 #=====================================================================
 #=====================================================================
 #
@@ -389,6 +296,7 @@ fi
 #
 # Full pathname to binaries to avoid problems with aliases and builtins etc.
 #
+PATH=/usr/local/bin:/usr/bin:/bin:/usr/local/mysql/bin
 WHICH="`which which`"
 AWK="`${WHICH} gawk`"
 LOGGER="`${WHICH} logger`"
@@ -409,6 +317,7 @@ CP="`${WHICH} cp`"
 HOSTNAMEC="`${WHICH} hostname`"
 SED="`${WHICH} sed`"
 GREP="`${WHICH} grep`"
+UMASK="umask"
 
 function get_debian_pw() {
 	if [ -r /etc/mysql/debian.cnf ]; then
@@ -448,19 +357,19 @@ done
 
 export LC_ALL=C
 PROGNAME=`${BASENAME} $0`
-PATH=/usr/local/bin:/usr/bin:/bin:/usr/local/mysql/bin 
 DATE=`${DATEC} +%Y-%m-%d_%Hh%Mm`				# Datestamp e.g 2002-09-21
 DOW=`${DATEC} +%A`							# Day of the week e.g. Monday
 DNOW=`${DATEC} +%u`						# Day number of the week 1 to 7 where 1 represents Monday
 DOM=`${DATEC} +%d`							# Date of the Month e.g. 27
 M=`${DATEC} +%B`							# Month e.g January
 W=`${DATEC} +%V`							# Week Number e.g 37
-VER=2.6.0									# Version Number
+VER=2.6.1									# Version Number
 LOGFILE=${BACKUPDIR}/${DBHOST}-`${DATEC} +%N`.log		# Logfile Name
 LOGERR=${BACKUPDIR}/ERRORS_${DBHOST}-`${DATEC} +%N`.log		# Logfile Name
 BACKUPFILES=""
 OPT="--quote-names --opt"			# OPT string for use with mysqldump ( see man mysqldump )
 MYDUMPER_OPT=''
+
 
 # IO redirection for logging.
 touch ${LOGFILE}
@@ -532,9 +441,9 @@ fi
 # Database dump function
 dbdump () {
     if [ "$MYDUMPER_USE" = 'yes' ]; then
-        ${MYDUMPER} --user=${USERNAME} --password=${PASSWORD} --host=${DBHOST} ${MYDUMPER_OPT} --database ${1} --outputdir ${2}
+        ${MYDUMPER} --user=${USERNAME} --password="${PASSWORD}" --host=${DBHOST} ${MYDUMPER_OPT} --database ${1} --outputdir ${2}
     else
-        ${MYSQLDUMP} --user=${USERNAME} --password=${PASSWORD} --host=${DBHOST} ${OPT} ${1} > ${2}
+        ${MYSQLDUMP} --user=${USERNAME} --password="${PASSWORD}" --host=${DBHOST} ${OPT} ${1} > ${2}
     fi
 return $?
 }
@@ -545,18 +454,18 @@ compression () {
 if [ "${COMP}" = "gzip" ]; then
 	${GZIP} -f "${1}"
 	${ECHO}
-	${ECHO} Backup Information for "${1}"
+	${ECHO} "Backup Information for \"${1}\""
 	${GZIP} -l "${1}.gz"
 	SUFFIX=".gz"
 elif [ "${COMP}" = "bzip2" ]; then
-	${ECHO} Compression information for "${1}.bz2"
+	${ECHO} "Compression information for \"${1}.bz2\""
 	${BZIP2} -f -v ${1} 2>&1
 	SUFFIX=".bz2"
 else
 	${ECHO} "No compression option set, check advanced settings"
 fi
 if [ "${LATEST}" = "yes" ]; then
-	${CP} ${1}${SUFFIX} "${BACKUPDIR}/latest/"
+	${CP} -avl ${1}${SUFFIX} "${BACKUPDIR}/latest/"
 fi	
 return 0
 }
@@ -565,12 +474,12 @@ return 0
 # Run command before we begin
 if [ "${PREBACKUP}" ]
 	then
-	${ECHO} ======================================================================
+	${ECHO} "======================================================================"
 	${ECHO} "Prebackup command output."
 	${ECHO}
 	eval ${PREBACKUP}
 	${ECHO}
-	${ECHO} ======================================================================
+	${ECHO} "======================================================================"
 	${ECHO}
 fi
 
@@ -597,7 +506,7 @@ fi
 
 # If backing up all DBs on the server
 if [ "${DBNAMES}" = "all" ]; then
-        DBNAMES="`${MYSQL} --user=${USERNAME} --password=${PASSWORD} --host=${DBHOST} --batch --skip-column-names -e "show databases"| ${SED} 's/ /%/g'`"
+        DBNAMES="`${MYSQL} --user=${USERNAME} --password="${PASSWORD}" --host=${DBHOST} --batch --skip-column-names -e "show databases"| ${SED} 's/ /%/g'`"
 
 	# If DBs are excluded
 	for exclude in ${DBEXCLUDE}
@@ -608,17 +517,19 @@ if [ "${DBNAMES}" = "all" ]; then
         MDBNAMES=${DBNAMES}
 fi
 	
-${ECHO} ======================================================================
-${ECHO} AutoMySQLBackup VER ${VER}
-${ECHO} http://sourceforge.net/projects/automysqlbackup/
+${ECHO} "======================================================================"
+${ECHO} "AutoMySQLBackup VER ${VER}"
+${ECHO} "http://sourceforge.net/projects/automysqlbackup/"
 ${ECHO} 
-${ECHO} Backup of Database Server - ${HOST}
-${ECHO} ======================================================================
-
+${ECHO} "Backup of Database Server - ${HOST}"
+${ECHO} "======================================================================"
+${ECHO}
+${ECHO} "Set umask to ${SET_UMASK}"
+${UMASK} ${SET_UMASK}
 # Test is seperate DB backups are required
 if [ "${SEPDIR}" = "yes" ]; then
-${ECHO} Backup Start Time `${DATEC}`
-${ECHO} ======================================================================
+${ECHO} "Backup Start Time `${DATEC}`"
+${ECHO} "======================================================================"
 	# Monthly Full Backup of all Databases
 	if [ ${DOM} = "01" ]; then
 		for MDB in ${MDBNAMES}
@@ -631,7 +542,7 @@ ${ECHO} ======================================================================
 			then
 				mkdir -p "${BACKUPDIR}/monthly/${MDB}"
 			fi
-			${ECHO} Monthly Backup of ${MDB}...
+			${ECHO} "Monthly Backup of ${MDB}..."
                 if [ "$MYDUMPER_USE" = 'yes' ]; then
                     if [ ! -e "${BACKUPDIR}/monthly/${MDB}/${MDB}_${DATE}.${M}.${MDB}" ]       # Check Database backup directory exists.
                     then
@@ -643,7 +554,7 @@ ${ECHO} ======================================================================
                 fi
 				[ $? -eq 0 ] && {
 					${ECHO} "Rotating 5 month backups for ${MDB}"
-					${FIND} "${BACKUPDIR}/monthly/${MDB}" -mtime +150 -type f -exec ${RM} -v {} \; 
+					${FIND} "${BACKUPDIR}/monthly/${MDB}" -mtime +${ROTATION_MONTHLY} -type f -exec ${RM} -v {} \; 
 				}
                 if [ "$MYDUMPER_USE" = 'yes' ]; then
 				    BACKUPFILES="${BACKUPFILES} ${BACKUPDIR}/monthly/${MDB}/${MDB}_${DATE}.${M}.${MDB}"
@@ -651,7 +562,7 @@ ${ECHO} ======================================================================
                     compression "${BACKUPDIR}/monthly/${MDB}/${MDB}_${DATE}.${M}.${MDB}.sql"
                     BACKUPFILES="${BACKUPFILES} ${BACKUPDIR}/monthly/${MDB}/${MDB}_${DATE}.${M}.${MDB}.sql${SUFFIX}"
                 fi
-			${ECHO} ----------------------------------------------------------------------
+			${ECHO} "----------------------------------------------------------------------"
 		done
 	fi
 
@@ -673,7 +584,7 @@ ${ECHO} ======================================================================
 	
 	# Weekly Backup
 	if [ ${DNOW} = ${DOWEEKLY} ]; then
-		${ECHO} Weekly Backup of Database \( ${DB} \)
+		${ECHO} "Weekly Backup of Database ( ${DB} )"
 		${ECHO}
             if [ "$MYDUMPER_USE" = 'yes' ]; then
                 if [ ! -e "${BACKUPDIR}/weekly/${DB}/${DB}_week.${W}.${DATE}" ]       # Check Database backup directory exists.
@@ -685,8 +596,8 @@ ${ECHO} ======================================================================
                 dbdump "${DB}" "${BACKUPDIR}/weekly/${DB}/${DB}_week.${W}.${DATE}.sql"
             fi
 			[ $? -eq 0 ] && {
-				${ECHO} Rotating 5 weeks Backups...
-				${FIND} "${BACKUPDIR}/weekly/${DB}" -mtime +35 -type f -exec ${RM} -v {} \; 
+				${ECHO} "Rotating 5 weeks Backups..."
+				${FIND} "${BACKUPDIR}/weekly/${DB}" -mtime +${ROTATION_WEEKLY} -type f -exec ${RM} -v {} \; 
 			}
             if [ "$MYDUMPER_USE" = 'yes' ]; then
 			    BACKUPFILES="${BACKUPFILES} ${BACKUPDIR}/weekly/${DB}/${DB}_week.${W}.${DATE}"
@@ -694,11 +605,11 @@ ${ECHO} ======================================================================
                 compression "${BACKUPDIR}/weekly/${DB}/${DB}_week.${W}.${DATE}.sql"
                 BACKUPFILES="${BACKUPFILES} ${BACKUPDIR}/weekly/${DB}/${DB}_week.${W}.${DATE}.sql${SUFFIX}"
             fi
-		${ECHO} ----------------------------------------------------------------------
+		${ECHO} "----------------------------------------------------------------------"
 	
 	# Daily Backup
 	else
-		${ECHO} Daily Backup of Database \( ${DB} \)
+		${ECHO} "Daily Backup of Database ( ${DB} )"
 		${ECHO}
             if [ "$MYDUMPER_USE" = 'yes' ]; then
                 if [ ! -e "${BACKUPDIR}/daily/${DB}/${DB}_${DATE}.${DOW}" ]       # Check Database backup directory exists.
@@ -710,8 +621,8 @@ ${ECHO} ======================================================================
                 dbdump "${DB}" "${BACKUPDIR}/daily/${DB}/${DB}_${DATE}.${DOW}.sql"
             fi
 			[ $? -eq 0 ] && {
-				${ECHO} Rotating last weeks Backup...
-				${FIND} "${BACKUPDIR}/daily/${DB}" -mtime +6 -type f -exec ${RM} -v {} \; 
+				${ECHO} "Rotating last weeks Backup..."
+				${FIND} "${BACKUPDIR}/daily/${DB}" -mtime +${ROTATION_DAILY} -type f -exec ${RM} -v {} \; 
 			}
             if [ "$MYDUMPER_USE" = 'yes' ]; then
 			    BACKUPFILES="${BACKUPFILES} ${BACKUPDIR}/daily/${DB}/${DB}_${DATE}.${DOW}"
@@ -719,19 +630,19 @@ ${ECHO} ======================================================================
                 compression "${BACKUPDIR}/daily/${DB}/${DB}_${DATE}.${DOW}.sql"
                 BACKUPFILES="${BACKUPFILES} ${BACKUPDIR}/daily/${DB}/${DB}_${DATE}.${DOW}.sql${SUFFIX}"
             fi
-		${ECHO} ----------------------------------------------------------------------
+		${ECHO} "----------------------------------------------------------------------"
 	fi
 	done
-${ECHO} Backup End `${DATEC}`
-${ECHO} ======================================================================
+${ECHO} "Backup End `${DATEC}`"
+${ECHO} "======================================================================"
 
 
 else # One backup file for all DBs
-${ECHO} Backup Start `${DATEC}`
-${ECHO} ======================================================================
+${ECHO} "Backup Start `${DATEC}`"
+${ECHO} "======================================================================"
 	# Monthly Full Backup of all Databases
 	if [ ${DOM} = "01" ]; then
-		${ECHO} Monthly full Backup of \( ${MDBNAMES} \)...
+		${ECHO} "Monthly full Backup of ( ${MDBNAMES} )..."
 			dbdump "${MDBNAMES}" "${BACKUPDIR}/monthly/${DATE}.${M}.all-databases.sql"
 			[ $? -eq 0 ] && {
 				${ECHO} "Rotating 5 month backups."
@@ -739,12 +650,12 @@ ${ECHO} ======================================================================
 			}
 			compression "${BACKUPDIR}/monthly/${DATE}.${M}.all-databases.sql"
 			BACKUPFILES="${BACKUPFILES} ${BACKUPDIR}/monthly/${DATE}.${M}.all-databases.sql${SUFFIX}"
-		${ECHO} ----------------------------------------------------------------------
+		${ECHO} "----------------------------------------------------------------------"
 	fi
 
 	# Weekly Backup
 	if [ ${DNOW} = ${DOWEEKLY} ]; then
-		${ECHO} Weekly Backup of Databases \( ${DBNAMES} \)
+		${ECHO} "Weekly Backup of Databases ( ${DBNAMES} )"
 		${ECHO}
 		${ECHO}
 			dbdump "${DBNAMES}" "${BACKUPDIR}/weekly/week.${W}.${DATE}.sql"
@@ -754,11 +665,11 @@ ${ECHO} ======================================================================
 			}
 			compression "${BACKUPDIR}/weekly/week.${W}.${DATE}.sql"
 			BACKUPFILES="${BACKUPFILES} ${BACKUPDIR}/weekly/week.${W}.${DATE}.sql${SUFFIX}"
-		${ECHO} ----------------------------------------------------------------------
+		${ECHO} "----------------------------------------------------------------------"
 		
 	# Daily Backup
 	else
-		${ECHO} Daily Backup of Databases \( ${DBNAMES} \)
+		${ECHO} "Daily Backup of Databases ( ${DBNAMES} )"
 		${ECHO}
 		${ECHO}
 			dbdump "${DBNAMES}" "${BACKUPDIR}/daily/${DATE}.${DOW}.sql"
@@ -768,29 +679,29 @@ ${ECHO} ======================================================================
 			}
 			compression "${BACKUPDIR}/daily/${DATE}.${DOW}.sql"
 			BACKUPFILES="${BACKUPFILES} ${BACKUPDIR}/daily/${DATE}.${DOW}.sql${SUFFIX}"
-		${ECHO} ----------------------------------------------------------------------
+		${ECHO} "----------------------------------------------------------------------"
 	fi
-${ECHO} Backup End Time `${DATEC}`
-${ECHO} ======================================================================
+${ECHO} "Backup End Time `${DATEC}`"
+${ECHO} "======================================================================"
 fi
-${ECHO} Total disk space used for backup storage..
-${ECHO} Size - Location
-${ECHO} `${DU} -hs "${BACKUPDIR}"`
+${ECHO} "Total disk space used for backup storage..."
+${ECHO} "Size - Location"
+${ECHO} "`${DU} -hsD "${BACKUPDIR}"`"
 ${ECHO}
-${ECHO} ======================================================================
-${ECHO} If you find AutoMySQLBackup valuable please make a donation at
-${ECHO} http://sourceforge.net/project/project_donations.php?group_id=101066
-${ECHO} ======================================================================
+${ECHO} "======================================================================"
+${ECHO} "If you find AutoMySQLBackup valuable please make a donation at"
+${ECHO} "http://sourceforge.net/project/project_donations.php?group_id=101066"
+${ECHO} "======================================================================"
 
 # Run command when we're done
 if [ "${POSTBACKUP}" ]
 	then
-	${ECHO} ======================================================================
+	${ECHO} "======================================================================"
 	${ECHO} "Postbackup command output."
 	${ECHO}
 	eval ${POSTBACKUP}
 	${ECHO}
-	${ECHO} ======================================================================
+	${ECHO} "======================================================================"
 fi
 
 #Clean up IO redirection
